@@ -41,3 +41,4 @@ and (18세이상인구수 <=12000 or 반>=100);
 select * from namgu
 where 인구수 >=10000
 and 18세이상인구수 <=12000 or 반>=100;
+customer

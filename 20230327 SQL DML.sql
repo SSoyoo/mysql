@@ -81,11 +81,139 @@ from customer as c;
 -- DISTINCT 
 SELECT DISTINCT name FROM customer;
 
+-- 연산자 
+-- 비교연산 
+
+# BETWEEN A and B : A보다 크거나 같으면서 B보다 작거나 같으면 TRUE 반환 
+
+SELECT * FROM customer
+WHERE age BETWEEN 10 AND 20;
+
+-- IN() : 인수로 전달된 값과 동일한 값이 하나라도 존재한다면 TRUE 반환
+
+SELECT * FROM Customer
+WHERE name IN('John Doe', 'Michle', 'James');
+
+SELECT * FROM Customer
+WHERE name = 'John Doe'
+or name ='Michle'
+or name = 'James';
 
 
+-- IS :비교대상이 boolean 형태일 때 사용하는 비교연산자 
+select * from customer
+where accept_marketing IS true;
+
+-- IS NULL : 비교대상이 NULL이면 TRUE 반환
+
+select * from customer
+where email is null;
+
+-- Like : 문자열의 패턴을 비교하여 동일한 패턴을 가지고 있는 문자열이면 true를 반환
+-- 와일드카드
+--  & : 0개 이상의 패턴
+-- _ : 1개의 패턴 
+
+select * from customer
+where email like '%gmail%'; -- 앞뒤에 뭐가 오든 gmail인걸 찾아라~
+
+-- Constraint (제약조건)
+-- RDBMS에서 삽입, 수정, 삭제에 대해서 무결성을 보장해주는 조건
+
+-- not null : 입력, 수정에 있어서 해당 필드에 null이 올 수 없다.
+
+-- create 
+create table notnullTable1 (
+	notnull_field int not null
+);
+
+-- alter
+-- alter로 제약조건을 추가할 때는 원래 존재하는 레코드에 해당 필드의 데이터가 null이 존재하면 안된다.
+alter table notnullTable1 
+	modify column nonull_field int not null
+;
+
+-- default 
+-- 입력 작업에서 해당 필드의 값이 들어오지 않으면 기본값으로 지정해주는 제약조건
+
+create table defaultTable1(
+	default_field int default 1
+);
+alter table defaultTable2
+	modify column default_field int default 1;
+    
+-- 디폴트가 아닌데 디폴트를 넣으면 기존에 null이었고, 나중에 디폴트 제약조건을 추가해도 null로 남아있고 나중에 추가해서 작업하는 것만 1로 된다
+
+-- unique
+-- 삽입 수정 작업에서 해당 제약조건이 걸려있는 필드의 데이터에 대해 중복을 허용하지 않음
+
+create table unique_Table1(
+	unique_field int unique
+);
+
+create table unique_Table3(
+	unique_field int,
+    constraint unique_key_1 unique (unique_field)
+);
+
+alter table unique_Table3
+	modify unique_field int unique;
+    
+    
+create table unique_Table4(
+	unique_field int
+);
 
 
+alter table unique_Table4
+	add constraint unique_key_1 unique (unique_field);
 
+
+-- primary key
+
+
+create table primary_table1(
+	primaty_field int primary key
+);
+
+create table primary_table2(
+	primary_field int,
+    constraint primary_key_1
+    primary key(primary_field)
+);
+
+alter table primary_table3
+modify column primary_field int primary key;
+
+alter table primary_table4
+	add constraint primary_key_1 primary key(primary_field)
+
+-- foreign key
+-- 참조 제약조건, 해당 테이블을 해당 필드를 기준으로 외부 테이블의 일부 필드를 마조하도록하는 제약조건
+-- 해당 제약조건이 걸려있는 필드의 경우 참조하는 테이블의 참조 필드에 존재하는 데이터만 삽입 할 수 있음
+
+create table referenced_table (
+	primary_key int primary key
+);
+
+-- create 시에 참조 제약조건을 추가할 땐 선행적으로 참조할 테이블과 필드가 존재해야하고
+-- 참조할 필드가 pk혹은 unique 제약조건이 지정되어 있어야한다.
+-- 참조 제약조건이 걸리는 필드는 참조할 필드의 데이터타입과 일치해야한다.
+create table foreign_table1 (
+	foreign_field int,
+    constraint foreign_key_1
+    foreign key (primary_filed)
+    references referenced_table (primary_key)
+);
+
+create table foreign_table2 (
+	foreign_field int
+);
+
+alter table foreign_table2
+add constraint foreign_key_1 
+foreign key (foreign_field)
+references referenced_table (primary_key) ;
 
 
 

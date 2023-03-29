@@ -7,8 +7,8 @@ use train_reservation;
 
 create table Cost(
 
-	departure_staion VARCHAR(50) not null,
-    arrival_station varchar(50) not null ,
+	departure_staion int not null,
+    arrival_station int not null ,
     amount int not null
     
 );
@@ -29,13 +29,12 @@ create table train(
 CREATE TABLE Staion (
 	Station_number int AUTO_INCREMENT PRIMARY KEY,
     Station_name VARCHAR(50) NOT NULL UNIQUE,
-    address  text NOT NULL UNIQUE,
+    address  varchar(500) NOT NULL UNIQUE,
     tel_number VARCHAR(15) NOT NULL UNIQUE 
 );
 
 
 CREATE TABLE Stop_station(
-	
 	
 	station_number int NOT NULL ,
     train_number VARCHAR(10) NOT NULL,
@@ -67,22 +66,35 @@ CREATE TABLE Seat(
     ***필드명을 적지 않았기 때문에 테이블의 순서대로 데이터를 넣어야함***
 */ 
 
-use hotel;
+alter table cost
+add constraint cost_primary_key 
+primary key (departure_staion, arrival_station); 
+
+alter table cost 
+add constraint cost_foreign_key_1 
+foreign key (departure_staion)
+references Staion (station_number);
+
+alter table cost 
+add constraint cost_foreign_key_2
+foreign key (arrival_station)
+references Staion (Station_number);
+
+alter table stop_station
+add constraint stop_station_primary_key
+primary key (Station_number,train_number);
 
 
 
+alter table stop_station
+add constraint stop_station_foreign_key_1
+foreign key (station_number)
+references staion(station_number);
 
-
-
-
-
-
-
-
-
-
-
-
+alter table stop_station
+add constraint stop_station_foreign_key_2
+foreign key (train_number)
+references train (train_number);
 
 
 
