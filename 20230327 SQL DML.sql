@@ -215,6 +215,6 @@ add constraint foreign_key_1
 foreign key (foreign_field)
 references referenced_table (primary_key) ;
 
-
+select * from station
 
 
